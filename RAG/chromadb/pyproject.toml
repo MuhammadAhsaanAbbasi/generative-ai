@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "chromadb"
+version = "0.1.0"
+description = ""
+authors = ["MuhammadAhsaanAbbasi <mahsaanabbasi@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+sentence-transformers = "^3.3.1"
+langchain-openai = "^0.2.14"
+httpx = "^0.28.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
