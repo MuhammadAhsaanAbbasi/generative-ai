@@ -12,6 +12,7 @@ pinecone-client = "^5.0.1"
 langchain = "^0.3.14"
 langchain-core = "^0.3.29"
 langchain-openai = "^0.2.14"
+streamlit = "^1.41.1"
 
 
 [build-system]
