@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "langchain-playground"
+name = "Langchain_series"
 version = "0.1.0"
 description = ""
 authors = ["MuhammadAhsaanAbbasi <mahsaanabbasi@gmail.com>"]
