@@ -16,7 +16,7 @@ _ = load_dotenv()
 
 embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
-vector_store = PineconeVectorStore
+# vector_store = PineconeVectorStore(embedding=embeddings)
 
 import re
 
@@ -30,32 +30,34 @@ def sanitize_file_name(file_name):
     return sanitized_name
 
 
-def pdf_save(file_name):
+def pdf_save(file_name, texts):
     # Sanitize the file name
     sanitized_file_name = sanitize_file_name(file_name)
 
-    # Initialize Pinecone & Embeddings
+    # Initialize Pinecone
     pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 
     existing_indexes = [index_info["name"] for index_info in pc.list_indexes()]
 
+    # Recreate index with correct dimension
     if sanitized_file_name not in existing_indexes:
         pc.create_index(
             name=sanitized_file_name,
-            dimension=1536,
+            dimension=768,  # Correct dimension for GoogleGenerativeAIEmbeddings
             metric="cosine",
             spec=ServerlessSpec(cloud="aws", region="us-east-1"),
         )
         while not pc.describe_index(sanitized_file_name).status["ready"]:
             time.sleep(1)
 
+    # Upload to Pinecone
     index = pc.Index(sanitized_file_name)
-      # Get the full details of the index
-    index_details = pc.describe_index(index.config.name)
+    vector_store = PineconeVectorStore(index=index, embedding=embeddings)
+    vector_store.add_documents(texts)
 
-      # Retrieve the full FQDN (URL) from the index details
-    index_url = f"https://{index_details["host"]}"
+    index_details = pc.describe_index(sanitized_file_name)
     return index_details
+
 
 
 def pdf_retriever(file_upload):
@@ -77,7 +79,7 @@ def pdf_retriever(file_upload):
     sanitized_file_name = sanitize_file_name(file_name)
 
     # Upload file to Pinecone
-    store = pdf_save(sanitized_file_name)
+    store = pdf_save(sanitized_file_name, texts)
 
     return store
 
@@ -87,6 +89,8 @@ def pdf_retriever(file_upload):
 st.title("Application Tracking System (A.T.S)")
 
 chatID = st.number_input("Enter your Chat ID", step=1, key="id")
+
+jobDesc = st.text_area("Enter your Job Description", key="desc")
 
 file_upload = st.file_uploader("Upload your resume", type=["pdf"])
 
