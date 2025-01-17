@@ -34,7 +34,7 @@ existing_index = [index_info["name"] for index_info in pc.list_indexes()]
 if INDEX_NAME not in existing_index:
     pc.create_index(
         name=INDEX_NAME,
-        dimension=3072,
+        dimension=1536,
         metric="cosine",
         spec=ServerlessSpec(cloud="aws", region="us-east-1"),
     )

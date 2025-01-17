@@ -1,5 +1,7 @@
-from sqlmodel import SQLModel, create_engine, Field
+from sqlmodel import SQLModel, create_engine, Field, Session
 from starlette.datastructures import Secret
+from typing import Annotated
+from fastapi import Depends
 import os
 
 # DATABASe URL Connection String SEtup
@@ -17,5 +19,13 @@ class ChatSession(SQLModel, table=True):
     vector_index: str
 
 
+def get_session():
+    with Session(engine) as session:
+        yield session
+
+DB_SESSION = Annotated[Session, Depends(get_session)]
+
 if __name__ == "__main__":
     create_db_and_tables()
+
+
