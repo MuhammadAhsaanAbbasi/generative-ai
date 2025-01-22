@@ -19,7 +19,7 @@ class ChatSession(SQLModel, table=True):
     vector_index: str
 
 
-def get_session():
+def get_session():    
     with Session(engine) as session:
         yield session
 
@@ -27,5 +27,4 @@ DB_SESSION = Annotated[Session, Depends(get_session)]
 
 if __name__ == "__main__":
     create_db_and_tables()
-
 
