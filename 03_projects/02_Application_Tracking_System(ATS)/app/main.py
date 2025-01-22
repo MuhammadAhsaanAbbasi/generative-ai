@@ -1,5 +1,6 @@
 import streamlit as st
-from services.chatbot import pdf_retriever, retrieve_answer
+from services.chatbot import retrieve_answer
+from services.retrieval import pdf_retriever
 from db.config import Session, engine
 
 st.title("Application Tracking System (A.T.S)")
@@ -17,7 +18,7 @@ if upload_file:
     else:
         st.error("Please upload a file!")
 
-chat_id = st.text_input("Enter your Chat ID (Optional)", key="id", value=None)
+chat_id = st.number_input("Enter your Chat ID (Optional)", key="id", step=1)
 job_desc = st.text_area("Enter Job Description")
 user_query = st.text_input("Enter your query", key="user_query")
 submit_query = st.button("Submit")
