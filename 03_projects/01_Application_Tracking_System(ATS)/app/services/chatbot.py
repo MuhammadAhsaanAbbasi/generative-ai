@@ -1,4 +1,5 @@
-from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_openai import ChatOpenAI
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain.agents import AgentExecutor, create_react_agent
@@ -22,26 +23,13 @@ import os
 _ = load_dotenv()
 
 
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.5)
+llm = ChatOpenAI(model="gpt-4o", temperature=0.5)
 
 embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 
 def retrieve_answer(job_desc, user_query, index_name, session: DB_SESSION, chat_id: int):
-
-    retrieval_tools = retrieve_tool(index_name=index_name)
-
-    tools = [retrieval_tools]
-
-    # Ensure all required variables for the prompt are included
-    prompt = hub.pull("hwchase17/react")
-
-    agent = create_react_agent(  # Replaces deprecated structured agent(
-        llm=llm,
-        prompt=prompt,
-        tools=tools
-    )
 
     # Retrieve chat history from the database
     db_chat = session.exec(select(ChatSession).where(ChatSession.id == chat_id)).first()
@@ -64,14 +52,23 @@ def retrieve_answer(job_desc, user_query, index_name, session: DB_SESSION, chat_
     else:
         memory = ConversationBufferMemory(memory_key="chat_history",  return_messages=True)
 
-    # Use the tool in the AgentExecutor along with memory
-    agent_executor = AgentExecutor(
-        agent=agent,
-        tools=tools,
-        memory=memory,
-        verbose=True,
-        handle_parsing_errors=True,
-    )
+    retrieval_tools = retrieve_tool(index_name=index_name)
+    tools = [retrieval_tools]
+
+    prompt = hub.pull("hwchase17/react")
+
+    # create react agent
+    agent = create_react_agent(llm, tools, prompt)
+
+    # Execute the agent
+    agent_executor = AgentExecutor.from_agent_and_tools(
+    agent=agent,
+    tools=tools,
+    memory=memory,
+    verbose=True,
+    handle_parsing_errors=True,
+)
+
 
     user_query = f"{user_query} \n job_description: {job_desc}"
 
@@ -92,5 +89,5 @@ def retrieve_answer(job_desc, user_query, index_name, session: DB_SESSION, chat_
 
     return {
         "output": response["output"],
-        "chat_history": db_chat.chat_messages
+        "chat_history": memory.chat_memory.messages
     }

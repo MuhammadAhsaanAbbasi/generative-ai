@@ -91,7 +91,7 @@ def retrieve_tool(index_name):
         [
             ("system", contextualize_q_system_prompt),
             MessagesPlaceholder("chat_history"),
-            ("human", "user_query: {input}\n job_description: {job_description}"),
+            ("human", "{input}"),
         ]
     )
 
@@ -102,7 +102,7 @@ def retrieve_tool(index_name):
     
     # Answer System Prompt
     qa_system_prompt = """
-    You are a skilled Applicant Tracking System (ATS) with deep expertise in the field of any one job role from Data Science, Full-Stack Web Development, Big Data Engineering, DevOps, AI/ML & Data Analyst & deep ATS Functionality .
+    You are a skilled Applicant Tracking System (ATS) with deep expertise in the field of any one job role from Data Science, Full-Stack Web Development, Big Data Engineering, DevOps, AI/ML, Data Analyst & Gen/Agentic AI Developer & deep ATS Functionality .
     Your task is to evaluate the Job Description against the provided Resume Context and return a response based on the user_query.
 
     Job Description: {job_description}
@@ -117,7 +117,7 @@ def retrieve_tool(index_name):
         [
             ("system", qa_system_prompt),
             MessagesPlaceholder("chat_history"),
-            ("human", "user_query: {input}\n job_description: {job_description}"),
+            ("human", "{input}"),
         ]
     )
 
@@ -132,6 +132,6 @@ def retrieve_tool(index_name):
         func=lambda input, **kwargs: retrieval_chain.invoke(
             {"input": input, "job_description": kwargs.get("job_description", ""), "chat_history": kwargs.get("chat_history", [])}
         ),
-        description="A tool for retrieving relevant context from Pinecone based on the user's query & job_description",
+        description="A tool for retrieving job & skills relevant context from Pinecone based on the user's query & job_description",
     )   
     return retrieval_tool

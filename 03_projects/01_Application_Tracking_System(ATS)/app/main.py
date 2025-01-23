@@ -30,7 +30,7 @@ if submit_query:
                 chat_id=chat_id,
                 job_desc=job_desc,
                 user_query=user_query,
-                index_name="muhammad-ahsaan-abbasi---resumepdf",
+                index_name=st.session_state.index_name,
                 session=session
             )
             st.write("Response:", response["output"])
