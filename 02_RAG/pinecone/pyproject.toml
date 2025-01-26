@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pinecone"
+name = "pinecone-rag"
 version = "0.1.0"
 description = ""
 authors = ["MuhammadAhsaanAbbasi <mahsaanabbasi@gmail.com>"]
@@ -8,7 +8,6 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.12,<3.13"
 langchain-pinecone = "^0.2.0"
-pinecone-client = "^5.0.1"
 langchain = "^0.3.14"
 langchain-core = "^0.3.29"
 langchain-openai = "^0.2.14"
@@ -16,7 +15,10 @@ streamlit = "^1.41.1"
 langchain-groq = "^0.2.3"
 sentencepiece = "^0.2.0"
 pinecone-text = "^0.9.0"
-
+matplotlib = "^3.10.0"
+deepface = "^0.0.93"
+pinecone-notebooks = "^0.1.1"
+pinecone-client = "^5.0.1"
 
 [build-system]
 requires = ["poetry-core"]
