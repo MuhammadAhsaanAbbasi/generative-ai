@@ -4,12 +4,7 @@ import json
 from langchain.memory import ConversationBufferMemory
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.schema import SystemMessage, HumanMessage, AIMessage
-
-BASE_URL = "http://localhost:11434/api/chat"
-
-headers = {
-    "Content-Type": "application/json"
-}
+from langchain.chat_models import init_chat_model
 
 # Initialize conversation memory
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
@@ -37,7 +32,7 @@ def extract_ai_response(response_data):
     Extracts the AI response content from the API response.
     """
     # Possible fields that might contain the AI response
-    possible_fields = ["response", "reply", "message", "data"]
+    possible_fields = ["content", "response", "reply", "message", "data"]
 
     for field in possible_fields:
         if field in response_data:
@@ -47,7 +42,7 @@ def extract_ai_response(response_data):
             elif field == "data" and isinstance(response_data[field], dict):
                 # Adjust based on your API's structure
                 return response_data[field].get("response_text", "No response_text in data.")
-            else:
+            elif isinstance(response_data[field], str):
                 return response_data[field]
     
     # If none of the expected fields are present
@@ -56,7 +51,13 @@ def extract_ai_response(response_data):
 def chatbot(input_text):
     # Define the prompt template
     prompt = ChatPromptTemplate.from_messages([
-        ("system", "You are a helpful assistant. Please respond to the user's input."),
+        ("system", """
+         You're an Expert Coding Assistant named Abbasikoder, created by M. Ahsaan Abbasi.
+         Answer only code-related questions being asked.
+         You're trained in various programming languages but you're an expert Full-Stack Cloud AI Developer.
+         You help users build scalable full-Stack AI applications.
+         Your expertise includes JS, TS, Python, React, Next.js, Node.js, Nest.js, FastAPI, Flask, Django, DevOps, Cloud Computing, Docker, CI/CD Pipeline, Generative/Agentic AI.
+         """),
         MessagesPlaceholder(variable_name="chat_history"),
         ("user", "{input_text}")  # Changed from "human" to "user"
     ])
@@ -80,36 +81,23 @@ def chatbot(input_text):
         "stream": False
     }
     
-    # Debug: Print the payload being sent
-    print("Request Payload:")
-    print(json.dumps(data, indent=2))
+    # Initialize and invoke the chat model
+    model = init_chat_model("abbasikoder", model_provider="ollama")
     
-    # Send POST request to the API
-    try:
-        response = requests.post(BASE_URL, headers=headers, data=json.dumps(data))  # Changed from 'data' to 'json'
-        response.raise_for_status()  # Raise an exception for HTTP errors
-    except requests.exceptions.RequestException as e:
-        # If the response has content, print it for debugging
-        if response is not None and response.text:
-            print("Response Content:")
-            print(response.text)
-        return f"Request failed: {e}"
+    # Invoke the model with serialized messages
+    response = model.invoke(serialized_messages)
     
-    # Parse the JSON response
-    try:
-        response_data = response.json()
-    except json.JSONDecodeError:
-        print("Failed to parse JSON response.")
-        print("Response Text:")
-        print(response.text)
-        return "Failed to parse response from the API."
+    # Convert the response to a dictionary
+    response_data = response.model_dump()
     
     # Debug: Print the entire response data
     print("API Response Data:")
     print(json.dumps(response_data, indent=2))
     
-    # Add AI response to memory
+    # Extract AI response
     ai_response = extract_ai_response(response_data)
+    
+    # Add AI response to memory
     memory.chat_memory.add_ai_message(ai_response)
     
     return ai_response
