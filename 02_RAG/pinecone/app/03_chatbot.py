@@ -20,14 +20,14 @@ GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
 llm = ChatGroq(
     api_key=GROQ_API_KEY,
-    model="llama-3.3-70b-versatile"
+    model="deepseek-r1-distill-llama-70b"
 )
 
 embedding = OpenAIEmbeddings(model="text-embedding-3-small")
 
 pc = Pinecone(api_key=pinecone_api_key)
 
-INDEX_NAME = "pinecone-chatbot"
+INDEX_NAME = "langgraphnewv2"
 
 existing_index = [index_info["name"] for index_info in pc.list_indexes()]
 
@@ -76,7 +76,8 @@ if st.button("Documents Embedding"):
 
 if user_input:
     document_chain = create_stuff_documents_chain(llm, prompt)
-    retriever = st.session_state.vectors.as_retriever()
+    vector_store = PineconeVectorStore(index=index, embedding=embedding)
+    retriever = vector_store.as_retriever(search_kwargs={'k': 3})
     retrieval_chain = create_retrieval_chain(retriever, document_chain)
     start=time.process_time()
     response=retrieval_chain.invoke({'input':user_input})
