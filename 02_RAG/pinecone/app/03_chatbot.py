@@ -20,7 +20,7 @@ GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
 llm = ChatGroq(
     api_key=GROQ_API_KEY,
-    model="deepseek-r1-distill-llama-70b"
+    model="llama-3.3-70b-versatile"
 )
 
 embedding = OpenAIEmbeddings(model="text-embedding-3-small")
