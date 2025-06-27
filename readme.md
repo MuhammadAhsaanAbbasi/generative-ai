@@ -6,7 +6,7 @@ Because the same underlying mechanism can handle different data types, contempor
 
 ---
 
-## LangChain
+## [LangChain](https://github.com/MuhammadAhsaanAbbasi/generative-ai/tree/main/01_langchain)
 
 **LangChain** is an open‑source Python framework that streamlines the creation of applications powered by large language models. It offers a high‑level interface for **prompt management**, **chaining multiple model calls**, **connecting to external data sources**, and **orchestrating tool usage** such as web search or code execution. By abstracting away repetitive boilerplate API calls, token counting, retry logic, and rate‑limiting, LangChain lets developers focus on product logic while still retaining low‑level control when needed.
 
@@ -22,7 +22,7 @@ Together, these components transform a raw LLM into a fully-fledged, context-awa
 
 ---
 
-## LangChain Overview (Course Focus)
+## [LangChain Overview (Course Focus)](https://github.com/MuhammadAhsaanAbbasi/generative-ai/tree/main/01_langchain)
 
 This course is a practical deep-dive into LangChain. You will:
 
@@ -38,7 +38,7 @@ Whether you are a beginner exploring LLMs for the first time or an experienced e
 
 ---
 
-## 4. Retrieval-Augmented Generation (RAG)
+## Retrieval-Augmented Generation (RAG)
 
 **RAG** is a framework that enhances the generation of responses from a language model by augmenting it with external, up-to-date, and relevant information retrieved from specific data sources (like the web, documents, or databases).
 
