@@ -22,23 +22,7 @@ Together, these components transform a raw LLM into a fully-fledged, context-awa
 
 ---
 
-## [LangChain Overview (Course Focus)](https://github.com/MuhammadAhsaanAbbasi/generative-ai/tree/main/01_langchain)
-
-This course is a practical deep-dive into LangChain. You will:
-
-1. **Understand the Core Abstractions** – Models, Prompts, Chains, Retrievers, Agents, and Tools.  
-2. **Build End-to-End Projects** – Starting with a simple Q&A bot, progressing to Retrieval-Augmented Generation, and finishing with agentic workflows that call external APIs.  
-3. **Master Best Practices** – Secure key management, cost control, prompt testing, evaluation metrics, and deployment strategies.  
-4. **Integrate with Real-World Data** – Load PDFs, SQL databases, REST endpoints, and live web content.  
-5. **Deploy & Monitor** – Ship your LangChain apps via Streamlit/FastAPI and monitor usage, latency, and token spend.  
-
-Whether you are a beginner exploring LLMs for the first time or an experienced engineer looking to accelerate product development, the lessons are structured so you can apply LangChain in diverse scenarios—from customer-support chatbots to document search engines and workflow automation.
-
-> **Outcome:** By the end of the course you will be able to design, implement, and deploy robust language-model applications that combine sophisticated prompting, external knowledge retrieval, and dynamic tool use—all powered by LangChain.
-
----
-
-## Retrieval-Augmented Generation (RAG)
+## [Retrieval-Augmented Generation (RAG)](https://github.com/MuhammadAhsaanAbbasi/generative-ai/tree/main/02_RAG)
 
 **RAG** is a framework that enhances the generation of responses from a language model by augmenting it with external, up-to-date, and relevant information retrieved from specific data sources (like the web, documents, or databases).
 
@@ -113,9 +97,9 @@ The RAG process involves retrieving relevant data from these sources, and the LL
 - **Accuracy:** By using real-time data retrieval, the model can generate more accurate and context-aware answers.
 - **Scalability:**: RAG can scale to handle large volumes of text, as it uses chunking and efficient retrieval techniques to access specific parts of the document.
 
-<hr />
+---
 
-## 5. Agents & Tools
+## Agents & Tools
 
 **Agents** & **Tools** are two key concepts in LangChain that allow language models to perform actions, interact with external systems, and generate results dynamically.
 
