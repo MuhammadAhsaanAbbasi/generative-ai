@@ -77,15 +77,12 @@ Retrieved chunks are “stapled” onto the user’s question, along with system
 
 The language model now drafts its reply, grounding every claim in the supplied passages.  Many implementations surface inline citations so users can audit each fact.
 
-<hr />
 
 ## Benefits of RAG:
 
 - **Efficiency:** Instead of passing an entire document to the model, RAG retrieves only the most relevant chunks, reducing the computational load.
 - **Accuracy:** By using real-time data retrieval, the model can generate more accurate and context-aware answers.
 - **Scalability:**: RAG can scale to handle large volumes of text, as it uses chunking and efficient retrieval techniques to access specific parts of the document.
-
-----
 
 <!-- ## Agents & Tools
 
