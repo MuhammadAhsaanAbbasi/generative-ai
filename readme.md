@@ -1,8 +1,10 @@
 # Generative AI Course Repository
 
-Generative AI is the branch of artificial intelligence concerned with producing novel content—text, images, audio, video, code, even molecular structures—rather than merely categorizing or retrieving existing data. At its core sit large-scale generative models such as large language models (LLMs) and large multimodal models; these networks contain billions of parameters and are pretrained on vast corpora that capture the statistical patterns of language, vision, and other modalities. When a user supplies a prompt—a natural-language instruction or question—the model reacts by predicting the most probable next token (or pixel or audio sample) again and again until a coherent new sequence emerges. This prompt-driven, “reactive” loop is the essence of generative AI: it does not plan, reason about external state, or call tools on its own; it simply synthesizes fresh content in response to the instructions it receives.
+**Generative AI** refers to artificial intelligence systems capable of creating new content—such as text, images, audio, or code—by learning patterns from existing data. These systems utilize sophisticated machine learning models, particularly deep learning algorithms, to understand and replicate the structures found in their training datasets. For example, models like OpenAI's DALL-E can generate images from textual descriptions, while ChatGPT produces human-like text responses based on input prompts.
 
-Because the same underlying mechanism can handle different data types, contemporary systems are increasingly multimodal, allowing a single model to produce paragraphs, illustrations, and soundtracks from a shared semantic space. Developers harness this capability through frameworks such as LangChain, LangGraph, Llama‑Index, or the native SDKs for providers like OpenAI and Groq, which wrap model calls, manage prompts, interface with vector databases, and simplify deployment. A basic generative‑AI application, therefore, consists of an LLM (or image/audio generator), a well‑crafted prompt, and any surrounding glue code required to feed input and display output; the model’s job is solely to generate. More sophisticated behaviours—deciding which external API to query, orchestrating multi‑step workflows, or collaborating with other agents—are not part of generative AI itself; they belong to the higher‑level paradigms of AI agents and agentic AI, which layer planning, tool use, and inter‑agent communication on top of the content‑generation engine.
+**Large Language Models (LLMs)** are a subset of generative AI focused on processing and generating human language. Trained on vast amounts of text data, LLMs can perform a variety of natural language processing tasks, including text generation, translation, summarization, and question-answering. They achieve this by leveraging deep learning architectures, such as transformers, to capture the nuances of language and context. Notable examples include OpenAI's GPT series and Google's BERT.
+
+In summary, generative AI encompasses a broad range of AI technologies capable of creating new content across various modalities, while LLMs specifically deal with understanding and generating human language, forming a crucial component of the generative AI landscape.
 
 ---
 
@@ -22,130 +24,25 @@ Together, these components transform a raw LLM into a fully-fledged, context-awa
 
 ---
 
-## Prompt Engineering 👩‍🔧📝
+## Prompt Engineering
 
-Prompt engineering is the craft of **getting more signal than noise out of a pre-trained LLM** purely by changing *what you say to it*—never its weights, never its training data. Think of it as UX design for language models: the prompt is the interface layer between human intent and model behaviour.
+[Watch: Prompt Engineering Fundamentals](https://learn.microsoft.com/en-gb/shows/generative-ai-for-beginners/understanding-prompt-engineering-fundamentals-generative-ai-for-beginners)
 
----
+[Watch: Creating Advanced Prompts](https://learn.microsoft.com/en-gb/shows/generative-ai-for-beginners/creating-advanced-prompts-generative-ai-for-beginners)
 
-### 1. Why it matters
+**Prompt engineering** is the process of designing and refining inputs—known as prompts—to guide generative AI models in producing desired outputs. This practice involves crafting specific instructions or questions that effectively communicate the user's intent to the AI system, thereby enhancing the relevance and accuracy of the generated responses. 
 
-| Advantage               | What it buys you                                                                     |
-| ----------------------- | ------------------------------------------------------------------------------------ |
-| **Zero infrastructure** | A tweak to a text string costs pennies and ships in minutes.                         |
-| **Rapid iteration**     | Non-technical teammates can experiment directly in a playground or prompt file.      |
-| **Safe exploration**    | You can probe the model’s existing knowledge before investing in RAG or fine-tuning. |
+In the context of **generative AI**, which includes models capable of creating text, images, or other content, prompt engineering is crucial for several reasons:
 
-> *Key takeaway*: Prompt tuning is your cheapest experiment, and often “good enough” for prototypes or content work.
+1. **Improving Output Quality**: Well-crafted prompts help AI models better understand the nuances and intent behind a query, leading to more accurate and contextually appropriate responses. 
 
----
+2. **Enhancing Model Comprehension**: By providing clear and detailed prompts, users can assist AI models in comprehending complex or technical queries, thereby improving the model's ability to generate relevant outputs. 
 
-### 2. How it actually works
+3. **Mitigating Biases and Errors**: Effective prompt engineering involves iterative refinement of prompts to minimize biases and confusion, which helps in producing more accurate and unbiased responses from AI models. 
 
-Prompt engineering is less one trick, more a toolbox. Below are the most common components you mix and match.
+4. **Expanding AI Capabilities**: Through strategic prompt design, users can leverage AI models to perform a wide range of tasks, from answering simple questions to generating complex technical content, thereby maximizing the utility of generative AI systems. 
 
-| Component                | Purpose               | Micro-example                                       |
-| ------------------------ | --------------------- | --------------------------------------------------- |
-| **Role**                 | Sets the persona      | “You are a veteran HR advisor…”                     |
-| **Task**                 | Specifies the goal    | “…explain our leave policy to an intern.”           |
-| **Format**               | Controls output shape | “Answer in three short bullet points.”              |
-| **Tone/Style**           | Adjusts voice         | “Keep the language friendly and jargon-free.”       |
-| **Few-shot examples**    | Teaches by showing    | Q-A pairs that illustrate the desired answer style. |
-| **Chain-of-thought cue** | Coaxes reasoning      | “Think step-by-step before you reply.”              |
-
-Under the hood the model simply sees a longer input string, but those extra cues nudge its next-token probabilities into a narrower, more useful band.
-
----
-
-### 3. Popular prompting patterns
-
-1. **Zero-shot role prompting**
-
-   > *Prompt*: “You are a sarcastic movie critic. Rate *The Matrix* in two sentences.”
-   > **Good for**: quick voice shifts.
-
-2. **Few-shot in-context learning**
-
-   > Provide two Q-A pairs, then a third question.
-   > **Good for**: structured data extraction, code translation, style mimicry.
-
-3. **Chain-of-thought or “let’s think”**
-
-   > *Prompt*: “First, outline your reasoning step-by-step, then give the final answer.”
-   > **Good for**: maths, multi-hop reasoning, complex instructions.
-
-4. **Self-consistency / “debate with yourself”**
-
-   > Ask the model to produce multiple answers, then pick the majority or best-scored one.
-   > **Good for**: reducing random errors in reasoning tasks.
-
----
-
-### 4. Concrete example (putting the pieces together)
-
-**Plain request (baseline)**
-
-> “Explain leave policy.”
-
-**Engineered prompt**
-
-```
-You are a helpful HR chatbot for ACME Inc.
-► Task: Explain ACME's leave policy to a new intern.
-► Constraints:
-  • Use simple language suitable for a 19-year-old.
-  • Bullet-point the key allowances.
-  • End with: “Let me know if you have any other questions!”
-Context: {insert policy excerpt here}
-```
-
-**Outcome**
-
-* Clear persona and audience
-* Structured, easy-to-scan format
-* Friendly sign-off
-* (If you later plug this into a RAG system, the `{insert policy excerpt}` slot becomes your dynamic context.)
-
----
-
-### 5. Best-practice checklist
-
-| ✅ Do                                                   | ❌ Avoid                                        |
-| ------------------------------------------------------ | ---------------------------------------------- |
-| Start with *one* well-defined task per prompt.         | Bundling multiple unrelated asks.              |
-| State output format explicitly (JSON, table, bullets). | Hoping the model “guesses” your layout.        |
-| Provide examples when precision matters.               | Excessively long context that buries the goal. |
-| Iterate, test, and version-control your prompts.       | Treating the first decent answer as final.     |
-| Use temperature = 0–0.3 for deterministic outputs.     | High randomness for financial or legal copy.   |
-
----
-
-### 6. Pain points to watch
-
-* **Brittleness** – a single extra adjective can change the answer.
-* **Token limits** – long prompts reduce room for the model’s reply.
-* **Knowledge cutoff** – no prompt can summon facts the model never saw; that’s where RAG or fine-tuning step in.
-
----
-
-### 7. When to stop tweaking and move on
-
-| Symptom                                                                      | Next step                                                 |
-| ---------------------------------------------------------------------------- | --------------------------------------------------------- |
-| Model hallucinates company-specific facts.                                   | Integrate **RAG** so it can reference live documents.     |
-| Output must always follow rigid company style *at scale*.                    | Invest in **fine-tuning** to bake the style into weights. |
-| Prompt iterations are producing diminishing returns yet latency is critical. | Consider lightweight adapter tuning or small RAG context. |
-
----
-
-### 8. Take-home summary
-
-1. **Prompt engineering = cheapest optimisation layer.**
-2. It shines for **speed, flexibility, and low-volume tasks**.
-3. It struggles with **out-of-scope knowledge and strict consistency**.
-4. Use it first, then layer **RAG** for fresh data and **fine-tuning** for fixed behaviour.
-
-Master the prompt toolbox, and you’ll squeeze far more value out of even the plainest foundation model—often without spending a cent on GPUs or retraining.
+In summary, prompt engineering serves as a vital interface between human intent and AI-generated content, playing a key role in harnessing the full potential of generative AI technologies. 
 
 ---
 
