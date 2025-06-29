@@ -22,10 +22,136 @@ Together, these components transform a raw LLM into a fully-fledged, context-awa
 
 ---
 
+## Prompt Engineering 👩‍🔧📝
+
+Prompt engineering is the craft of **getting more signal than noise out of a pre-trained LLM** purely by changing *what you say to it*—never its weights, never its training data. Think of it as UX design for language models: the prompt is the interface layer between human intent and model behaviour.
+
+---
+
+### 1. Why it matters
+
+| Advantage               | What it buys you                                                                     |
+| ----------------------- | ------------------------------------------------------------------------------------ |
+| **Zero infrastructure** | A tweak to a text string costs pennies and ships in minutes.                         |
+| **Rapid iteration**     | Non-technical teammates can experiment directly in a playground or prompt file.      |
+| **Safe exploration**    | You can probe the model’s existing knowledge before investing in RAG or fine-tuning. |
+
+> *Key takeaway*: Prompt tuning is your cheapest experiment, and often “good enough” for prototypes or content work.
+
+---
+
+### 2. How it actually works
+
+Prompt engineering is less one trick, more a toolbox. Below are the most common components you mix and match.
+
+| Component                | Purpose               | Micro-example                                       |
+| ------------------------ | --------------------- | --------------------------------------------------- |
+| **Role**                 | Sets the persona      | “You are a veteran HR advisor…”                     |
+| **Task**                 | Specifies the goal    | “…explain our leave policy to an intern.”           |
+| **Format**               | Controls output shape | “Answer in three short bullet points.”              |
+| **Tone/Style**           | Adjusts voice         | “Keep the language friendly and jargon-free.”       |
+| **Few-shot examples**    | Teaches by showing    | Q-A pairs that illustrate the desired answer style. |
+| **Chain-of-thought cue** | Coaxes reasoning      | “Think step-by-step before you reply.”              |
+
+Under the hood the model simply sees a longer input string, but those extra cues nudge its next-token probabilities into a narrower, more useful band.
+
+---
+
+### 3. Popular prompting patterns
+
+1. **Zero-shot role prompting**
+
+   > *Prompt*: “You are a sarcastic movie critic. Rate *The Matrix* in two sentences.”
+   > **Good for**: quick voice shifts.
+
+2. **Few-shot in-context learning**
+
+   > Provide two Q-A pairs, then a third question.
+   > **Good for**: structured data extraction, code translation, style mimicry.
+
+3. **Chain-of-thought or “let’s think”**
+
+   > *Prompt*: “First, outline your reasoning step-by-step, then give the final answer.”
+   > **Good for**: maths, multi-hop reasoning, complex instructions.
+
+4. **Self-consistency / “debate with yourself”**
+
+   > Ask the model to produce multiple answers, then pick the majority or best-scored one.
+   > **Good for**: reducing random errors in reasoning tasks.
+
+---
+
+### 4. Concrete example (putting the pieces together)
+
+**Plain request (baseline)**
+
+> “Explain leave policy.”
+
+**Engineered prompt**
+
+```
+You are a helpful HR chatbot for ACME Inc.
+► Task: Explain ACME's leave policy to a new intern.
+► Constraints:
+  • Use simple language suitable for a 19-year-old.
+  • Bullet-point the key allowances.
+  • End with: “Let me know if you have any other questions!”
+Context: {insert policy excerpt here}
+```
+
+**Outcome**
+
+* Clear persona and audience
+* Structured, easy-to-scan format
+* Friendly sign-off
+* (If you later plug this into a RAG system, the `{insert policy excerpt}` slot becomes your dynamic context.)
+
+---
+
+### 5. Best-practice checklist
+
+| ✅ Do                                                   | ❌ Avoid                                        |
+| ------------------------------------------------------ | ---------------------------------------------- |
+| Start with *one* well-defined task per prompt.         | Bundling multiple unrelated asks.              |
+| State output format explicitly (JSON, table, bullets). | Hoping the model “guesses” your layout.        |
+| Provide examples when precision matters.               | Excessively long context that buries the goal. |
+| Iterate, test, and version-control your prompts.       | Treating the first decent answer as final.     |
+| Use temperature = 0–0.3 for deterministic outputs.     | High randomness for financial or legal copy.   |
+
+---
+
+### 6. Pain points to watch
+
+* **Brittleness** – a single extra adjective can change the answer.
+* **Token limits** – long prompts reduce room for the model’s reply.
+* **Knowledge cutoff** – no prompt can summon facts the model never saw; that’s where RAG or fine-tuning step in.
+
+---
+
+### 7. When to stop tweaking and move on
+
+| Symptom                                                                      | Next step                                                 |
+| ---------------------------------------------------------------------------- | --------------------------------------------------------- |
+| Model hallucinates company-specific facts.                                   | Integrate **RAG** so it can reference live documents.     |
+| Output must always follow rigid company style *at scale*.                    | Invest in **fine-tuning** to bake the style into weights. |
+| Prompt iterations are producing diminishing returns yet latency is critical. | Consider lightweight adapter tuning or small RAG context. |
+
+---
+
+### 8. Take-home summary
+
+1. **Prompt engineering = cheapest optimisation layer.**
+2. It shines for **speed, flexibility, and low-volume tasks**.
+3. It struggles with **out-of-scope knowledge and strict consistency**.
+4. Use it first, then layer **RAG** for fresh data and **fine-tuning** for fixed behaviour.
+
+Master the prompt toolbox, and you’ll squeeze far more value out of even the plainest foundation model—often without spending a cent on GPUs or retraining.
+
+---
+
 ## [Retrieval-Augmented Generation (RAG)](https://github.com/MuhammadAhsaanAbbasi/generative-ai/tree/main/02_RAG)
 
 **RAG** is a framework that enhances the generation of responses from a language model by augmenting it with external, up-to-date, and relevant information retrieved from specific data sources (like the web, documents, or databases).
-
 
 ### High-Level Overview:
 
