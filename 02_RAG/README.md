@@ -8,57 +8,98 @@ Welcome to the **RAG ADVANCED TECHNIQUES** section! This folder contains code sa
 
 **RAG** is a two-step dance: *retrieve* fresh, domain-specific facts at the moment of a question, then *generate* a natural-language answer that weaves those facts together.  Instead of forcing a model to “remember” everything during training, we feed it exactly what it needs, exactly when it needs it.
 
----
-
 ![Detail Overview](https://myapplication-logos.s3.ap-south-1.amazonaws.com/Detailed+Overview+RAG.jpg)
+
+---
 
 ## Core Components
 
-### 1. External Knowledge Sources
+### 1 · External Knowledge Sources
 
-Web pages, PDFs, policy docs, code bases, video transcripts—anything you can turn into text is fair game.  These sources live **outside** the model and can be updated independently.
+High-quality RAG begins with **fresh, authoritative material that lives outside the model’s weights**—product manuals in PDF, wiki pages, SQL rows, call-centre transcripts, code snippets, video subtitles, even CSV sensor logs. These sources either post-date the model’s training cut-off or contain proprietary knowledge the public web never held, so they set the ceiling on every downstream metric.
 
-### 2. Chunking
+To maximise value:
 
-Large documents are sliced into small, overlapping passages (typically 300-1 000 tokens).  This keeps each piece topically focused and cheap to search.
-
-### 3. Embeddings
-
-Every chunk is converted into a numerical vector that captures semantic meaning.  Similar ideas land near one another in this high-dimensional space.
-
-### 4. Vector Store
-
-A purpose-built database (Pinecone, Chroma, Weaviate, etc.) stores those vectors and supports lightning-fast similarity search, plus metadata filters and access controls.
-
-### 5. Similarity Retrieval
-
-When a user asks a question, their query is embedded too.  The system pulls the *k* most similar chunks—often refined with hybrid keyword + semantic search to boost precision.
-
-### 6. Prompt Assembly
-
-Retrieved chunks are “stapled” onto the user’s question, along with system instructions like *“Cite all sources and answer only from provided context.”*
-
-### 7. Generation
-
-The language model now drafts its reply, grounding every claim in the supplied passages.  Many implementations surface inline citations so users can audit each fact.
+- **Curate wisely:** balance the breadth of user forums with the cleanliness of edited guides.  
+- **Pre-clean:** strip boilerplates, ads, and footers to boost retrieval precision (at an ETL cost).  
+- **Segment by sensitivity:** isolate PII-heavy files in a separately guarded index.
 
 ---
 
-## Illustrated Walkthrough
+### 2 · Chunking
 
-* **High-Level Diagram (see first image):** shows the circular loop—question → embedding → retrieve context → LLM → answer.  
-* **Detailed Pipeline (see second image):** highlights the data pipeline (collection, preprocessing, embedding), the retrieval step (vector DB search), and the generation step where prompt + context flow into the LLM.  
-* **Multimodal Variant (see third image):** demonstrates that text and images can each have their own vector index, allowing RAG to ground answers in mixed media.  
-* **Optimisation Diagram (see fourth image):** visualises nearest-neighbour retrieval and prompt construction, reminding us that retrieval quality directly controls answer quality.
+Entire documents overflow an LLM context window, so we *slice* them into **semantically coherent segments**. The sweet spot—roughly **300 – 1 000 tokens with 10–20 % overlap**—leaves room for metadata and the answer while preserving context for pronouns, formulas, or code blocks.
+
+Key practices:
+
+- Use recursive splitters (section → paragraph → sentence) to keep logical flow.  
+- Chunk code by function or class, not arbitrary lines.  
+- Manually spot-check; splitting mid-table or mid-equation destroys meaning and poisons retrieval.
 
 ---
 
-## Benefits at a Glance
+### 3 · Embeddings
 
-* **Up-to-date:** swap new documents in and outdated ones out—no retraining cycles.  
-* **Explainable:** cite passages so humans (or auditors) can verify every statement.  
-* **Efficient:** only the relevant slices consume context-window space and tokens.  
-* **Secure:** sensitive docs stay in your controlled database; the model sees them only transiently.
+Each chunk is transformed into a **dense vector in ℝⁿ** so that geometric distance reflects semantic similarity. Commercial APIs such as `text-embedding-3` deliver multilingual quality at a per-token fee; open-source families like **BGE** or **GTE** offer local control but demand GPU/CPU servers.
+
+Watch these levers:
+
+- **Dimensionality** drives RAM footprint and index size.  
+- **Domain tuning** (e.g., oncology jargon) can lift recall but needs data + compute.  
+- **Throughput & latency** govern real-time user experience.
+
+---
+
+### 4 · Vector Store
+
+A vector is only useful if you can **retrieve neighbours in milliseconds**. Engines like **Pinecone**, **Chroma**, **Weaviate**, **Qdrant**, or **Milvus** build specialised indexes—HNSW for RAM speed, IVF-PQ for disk scale—and attach JSON metadata (source URL, page, language, security tag).
+
+Operational must-haves:
+
+- **Boolean / ACL filters** from metadata to enforce data residency or role-based access.  
+- **Replication & backups** when answers influence compliance or legal workflows.
+
+---
+
+### 5 · Similarity Retrieval
+
+At query time, the user’s question is embedded and matched against the store. **Hybrid search**—dense vectors **plus** BM25 keywords—captures both synonyms and exact terms, then a cross-encoder re-ranks the top candidates for razor-sharp precision.
+
+Tuning knobs:
+
+- `k` (how many chunks) and similarity threshold.  
+- Diversification (MMR, RRF) to avoid near-duplicate passages.  
+- Language, date, or security filters for contextual relevance.
+
+---
+
+### 6 · Prompt Assembly
+
+Retrieved passages, the user question, and a system instruction are woven into a single prompt. Delimiters such as `---SOURCE 1---` help the model cite cleanly, while reserving **25–30 % of the context window** for the answer prevents truncation.
+
+Guardrails that matter:
+
+- *“Answer **only** from the provided context and cite sources in \[brackets\].”*  
+- Consistent formatting so automated post-processing (e.g., HTML rendering) stays simple.
+
+---
+
+### 7 · Generation
+
+The LLM now drafts the response, grounding each claim in the supplied evidence. For analytical tasks, prepend a chain-of-thought cue—*“Let’s reason step by step.”* Production stacks often add a **critic loop**: a second model verifies every statement appears in context, flagging hallucinations.
+
+Fine-tuning output:
+
+- **Temperature 0.1 – 0.3** for deterministic, citation-heavy prose; higher for creative summaries.  
+- Emit plain text, Markdown, or structured JSON depending on downstream consumers.
+
+---
+
+## Benefits of RAG:
+
+- **Efficiency:** Instead of passing an entire document to the model, RAG retrieves only the most relevant chunks, reducing the computational load.
+- **Accuracy:** By using real-time data retrieval, the model can generate more accurate and context-aware answers.
+- **Scalability:**: RAG can scale to handle large volumes of text, as it uses chunking and efficient retrieval techniques to access specific parts of the document.
 
 ---
 
