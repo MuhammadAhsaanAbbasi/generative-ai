@@ -26,8 +26,6 @@ Together, these components transform a raw LLM into a fully-fledged, context-awa
 
 **RAG** is a framework that enhances the generation of responses from a language model by augmenting it with external, up-to-date, and relevant information retrieved from specific data sources (like the web, documents, or databases).
 
----
-
 ### High-Level Overview:
 
 In the context of RAG, think of the LLM Knowledge as the central piece, but it is being fed with various retrieval sources:
@@ -76,8 +74,6 @@ Retrieved chunks are “stapled” onto the user’s question, along with system
 ### 7. Generation
 
 The language model now drafts its reply, grounding every claim in the supplied passages.  Many implementations surface inline citations so users can audit each fact.
-
----
 
 ### Benefits of RAG:
 - **Efficiency:** Instead of passing an entire document to the model, RAG retrieves only the most relevant chunks, reducing the computational load.
