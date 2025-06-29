@@ -8,23 +8,7 @@ In summary, generative AI encompasses a broad range of AI technologies capable o
 
 ---
 
-## [LangChain](https://github.com/MuhammadAhsaanAbbasi/generative-ai/tree/main/01_langchain)
-
-**LangChain** is an open‑source Python framework that streamlines the creation of applications powered by large language models. It offers a high‑level interface for **prompt management**, **chaining multiple model calls**, **connecting to external data sources**, and **orchestrating tool usage** such as web search or code execution. By abstracting away repetitive boilerplate API calls, token counting, retry logic, and rate‑limiting, LangChain lets developers focus on product logic while still retaining low‑level control when needed.
-
-### Key Pillars
-
-- **Models** – Wrappers for proprietary (OpenAI, Anthropic) and open-source (Llama, Mistral) LLMs.  
-- **Prompts & Prompt Templates** – Reusable, parameterised instructions that keep your prompt engineering organized.  
-- **Chains** – Composable workflows that pass the output of one step into the next, enabling multi-step reasoning or data pipelines.  
-- **Retrievers & Vector Stores** – Plug-ins for Retrieval-Augmented Generation (RAG) that ground model output in private or real-time knowledge.  
-- **Agents & Tools** – Higher-order abstractions allowing an LLM to decide which actions to take (e.g., run a search query, call an API) in order to meet a user goal.  
-
-Together, these components transform a raw LLM into a fully-fledged, context-aware application with minimal code.
-
----
-
-## Prompt Engineering
+## [Prompt Engineering](https://github.com/MuhammadAhsaanAbbasi/generative-ai/tree/main/00_foundations/01_prompt_engineering)
 
 [Watch: Prompt Engineering Fundamentals](https://learn.microsoft.com/en-gb/shows/generative-ai-for-beginners/understanding-prompt-engineering-fundamentals-generative-ai-for-beginners)
 
@@ -108,6 +92,22 @@ The language model now drafts its reply, grounding every claim in the supplied p
 - **Scalability:**: RAG can scale to handle large volumes of text, as it uses chunking and efficient retrieval techniques to access specific parts of the document.
 
 ----
+
+## [LangChain](https://github.com/MuhammadAhsaanAbbasi/generative-ai/tree/main/01_langchain)
+
+**LangChain** is an open‑source Python framework that streamlines the creation of applications powered by large language models. It offers a high‑level interface for **prompt management**, **chaining multiple model calls**, **connecting to external data sources**, and **orchestrating tool usage** such as web search or code execution. By abstracting away repetitive boilerplate API calls, token counting, retry logic, and rate‑limiting, LangChain lets developers focus on product logic while still retaining low‑level control when needed.
+
+### Key Pillars
+
+- **Models** – Wrappers for proprietary (OpenAI, Anthropic) and open-source (Llama, Mistral) LLMs.  
+- **Prompts & Prompt Templates** – Reusable, parameterised instructions that keep your prompt engineering organized.  
+- **Chains** – Composable workflows that pass the output of one step into the next, enabling multi-step reasoning or data pipelines.  
+- **Retrievers & Vector Stores** – Plug-ins for Retrieval-Augmented Generation (RAG) that ground model output in private or real-time knowledge.  
+- **Agents & Tools** – Higher-order abstractions allowing an LLM to decide which actions to take (e.g., run a search query, call an API) in order to meet a user goal.  
+
+Together, these components transform a raw LLM into a fully-fledged, context-aware application with minimal code.
+
+---
 
 <!-- ## Agents & Tools
 
