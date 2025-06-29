@@ -40,7 +40,7 @@ Key practices:
 
 ### 3 · Embeddings
 
-Each chunk is transformed into a **dense vector in ℝⁿ** so that geometric distance reflects semantic similarity. Commercial APIs such as `text-embedding-3` deliver multilingual quality at a per-token fee; open-source families like **BGE** or **GTE** offer local control but demand GPU/CPU servers.
+Each chunk is transformed into a **dense vector in ℝⁿ** so that geometric distance reflects semantic similarity. Commercial APIs such as `text-embedding-3` deliver multilingual quality at a per-token fee; open-source families like **BERT** or **GPT** offer local control but demand GPU/CPU servers.
 
 Watch these levers:
 
