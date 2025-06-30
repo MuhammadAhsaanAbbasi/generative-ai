@@ -8,7 +8,7 @@ In summary, generative AI encompasses a broad range of AI technologies capable o
 
 ---
 
-## [Prompt Engineering](https://github.com/MuhammadAhsaanAbbasi/generative-ai/tree/main/00_foundations/01_prompt_engineering)
+## [Prompt Engineering](https://github.com/MuhammadAhsaanAbbasi/generative-ai/tree/main/00_foundations/02_prompt_engineering)
 
 [Watch: Prompt Engineering Fundamentals](https://learn.microsoft.com/en-gb/shows/generative-ai-for-beginners/understanding-prompt-engineering-fundamentals-generative-ai-for-beginners)
 
