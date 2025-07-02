@@ -93,6 +93,39 @@ The language model now drafts its reply, grounding every claim in the supplied p
 
 ----
 
+## LLM Fine-Tuning
+
+Fine-tuning moves beyond clever prompts or run-time retrieval by **re-training an LLM’s weights on your own examples**. A short, extra training phase nudges the model’s millions of parameters so it naturally speaks in your brand voice, uses domain jargon, follows fixed output formats, or executes niche tasks—even when you give it a tiny prompt.
+
+**How it’s done**
+
+1. **Collect high-quality prompt-response pairs** (a few thousand good ones usually beat tens of thousands of noisy ones).
+2. **Pick a strategy**
+
+   * Full fine-tune – update *all* weights on a small/medium model for maximum control.
+   * LoRA / PEFT adapters – insert small trainable matrices into a frozen large model: cheaper, popular for chatbots.
+   * Instruction-tune – adjust only upper layers to enforce politeness, JSON output, etc.
+3. **Train & monitor** until validation loss plateaus, then evaluate with safety and hallucination tests.
+4. **Deploy** the resulting checkpoint, optionally quantised for edge devices, and version it like any other binary.
+
+**Why people do it**
+
+* **Consistency** – personality and formatting are baked in; no giant system prompts required.
+* **Offline / air-gapped use** – all knowledge sits inside the model weights, no external DB calls.
+* **Latency & throughput** – deterministic answers for high-volume classification or extraction tasks.
+
+**Trade-offs**
+
+* **Up-front cost** – GPUs, data labelling, and ML-Ops infrastructure.
+* **Maintenance** – new facts mean another training round (or you add a RAG layer on top).
+* **Risk of over-fit** – too little or biased data can narrow the model’s general reasoning.
+
+**When it’s the right tool**
+
+Choose fine-tuning when you must lock in brand tone at scale, run on secure hardware with no internet, or deliver ultra-fast, structured outputs (e.g., invoice coding). Stick with prompt engineering for quick prototypes, and add RAG when you simply need fresher facts.
+
+---
+
 ## [LangChain](https://github.com/MuhammadAhsaanAbbasi/generative-ai/tree/main/01_langchain)
 
 **LangChain** is an open‑source Python framework that streamlines the creation of applications powered by large language models. It offers a high‑level interface for **prompt management**, **chaining multiple model calls**, **connecting to external data sources**, and **orchestrating tool usage** such as web search or code execution. By abstracting away repetitive boilerplate API calls, token counting, retry logic, and rate‑limiting, LangChain lets developers focus on product logic while still retaining low‑level control when needed.
