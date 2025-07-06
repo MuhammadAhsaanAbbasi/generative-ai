@@ -128,4 +128,8 @@ Techniques for prompting LLMs in more sophisticated ways began to take off in 20
 
 Reference:
 
-https://www.deeplearning.ai/the-batch/issue-281/
+- [https://www.deeplearning.ai/the-batch/issue-281/](https://www.deeplearning.ai/the-batch/issue-281/)
+
+- [GPT-4.1 Prompting Guide](https://cookbook.openai.com/examples/gpt4-1_prompting_guide)
+
+- [Best Prompt Techniques for Best LLM Responses](https://medium.com/the-modern-scientist/best-prompt-techniques-for-best-llm-responses-24d2ff4f6bca)
