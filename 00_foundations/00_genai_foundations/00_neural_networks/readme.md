@@ -1,7 +1,5 @@
 # Building GANs, Diffusers & Transformer Models with Neural Networks
 
----
-
 ## 1  Neural Networks—Digital “Brain Cells” of AI
 
 Neural networks are computing systems inspired by the way biological neurons pass electrical signals.
@@ -91,3 +89,4 @@ All of these are clever rearrangements of the same “lego bricks”: neurons, w
 * Modern architectures (Transformers, Diffusers) are still built on these fundamentals.
 * With enough data and compute, neural networks convert raw numbers into astonishing real-world results—recognising digits, generating photorealistic art, or scripting entire conversations.
 
+---
