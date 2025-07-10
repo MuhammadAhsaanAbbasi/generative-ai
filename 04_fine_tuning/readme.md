@@ -100,3 +100,7 @@ If you only need *fresh* factual knowledge, bolt on **RAG** instead. If you just
 ## 10. Take-home
 
 Fine-tuning is like giving “Jarvis” a full semester of private tutoring: once the lessons stick, it answers in your voice, with your expertise, every single time—no extra hints needed. It costs more than clever prompting or a RAG backpack, but when you *must* own both the brain and the voice of your AI, fine-tuning is the surest path.
+
+<h2 align="center">
+Dear Brother and Sister Show some ❤ by <img src="https://imgur.com/o7ncZFp.jpg" height=25px width=25px> this repository!
+</h2>

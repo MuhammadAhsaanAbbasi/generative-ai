@@ -129,3 +129,7 @@ Fine-tuning output:
 5. **Monitor drift:** as docs evolve, re-embed and re-evaluate; retrieval quality can quietly decay over time.
 
 Master these pieces and you have a robust recipe for building assistants that are both **knowledge-rich and verifiably accurate**—no model retraining required.
+
+<h2 align="center">
+Dear Brother and Sister Show some ❤ by <img src="https://imgur.com/o7ncZFp.jpg" height=25px width=25px> this repository!
+</h2>
